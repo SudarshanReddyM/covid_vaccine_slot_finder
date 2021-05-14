@@ -44,6 +44,7 @@ url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDi
 print("\n")
 while True:
     logging.info("You will receive a call if a vacant slot is found")
+    time.sleep(60)
     vaccine_centres = requests.get(url=url, headers=headers)
     if vaccine_centres.status_code == 200:
         vaccine_centres = json.loads(vaccine_centres.content.decode("utf-8"))
@@ -51,7 +52,6 @@ while True:
         for centre in vaccine_centres.get("centers"):
             if count == 1:
                 count = 0
-                time.sleep(60)
                 break
             for session in centre.get("sessions"):      
                 if session.get("min_age_limit") == 18 and session.get("available_capacity"):
@@ -60,5 +60,5 @@ while True:
                     count = 1
                     break
     else:
-        time.sleep(10)
+        time.sleep(120)
                       
