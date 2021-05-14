@@ -45,18 +45,20 @@ print("\n")
 while True:
     logging.info("You will receive a call if a vacant slot is found")
     vaccine_centres = requests.get(url=url, headers=headers)
-    vaccine_centres = json.loads(vaccine_centres.content.decode("utf-8"))
-    print(vaccine_centres)
-    for centre in vaccine_centres.get("centers"):
-        if count == 1:
-            count = 0
-            time.sleep(60)
-            break
-        for session in centre.get("sessions"):
-            
-            if session.get("min_age_limit") == 18 and session.get("available_capacity"):
-                logging.info("Calling and Notifying user")
-                # dial_numbers(DIAL_NUMBERS)
-                count = 1
+    if vaccine_centres.status_code == 200:
+        vaccine_centres = json.loads(vaccine_centres.content.decode("utf-8"))
+        print(vaccine_centres)
+        for centre in vaccine_centres.get("centers"):
+            if count == 1:
+                count = 0
+                time.sleep(60)
                 break
-            
+            for session in centre.get("sessions"):      
+                if session.get("min_age_limit") == 18 and session.get("available_capacity"):
+                    logging.info("Calling and Notifying user")
+                    dial_numbers(DIAL_NUMBERS)
+                    count = 1
+                    break
+    else:
+        time.sleep(10)
+                      
