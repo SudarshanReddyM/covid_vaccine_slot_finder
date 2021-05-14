@@ -3,6 +3,12 @@ import datetime
 import json
 import time
 from twilio.rest import Client
+import logging
+
+log_formatter ='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+
+logging.basicConfig(level=logging.DEBUG, filename="slot_finder.log", format=log_formatter)
+logging.debug('This will get logged')
 
 # My twilio number which makes calls
 TWILIO_PHONE_NUMBER = "+19192308789"
@@ -38,13 +44,16 @@ url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDi
 print("\n")
 while True:
     vaccine_centres = requests.get(url=url, headers=headers)
-    for centre in vaccine_centres.json().get("centers"):
+    for centre in json.loads(vaccine_centres.text).get("centers"):
         if count == 1:
             count = 0
             time.sleep(60)
             break
         for session in centre.get("sessions"):
+            log.info("You will receive a call if a vacant slot is found")
             if session.get("min_age_limit") == 18 and session.get("available_capacity"):
+                log.info("Calling and Notifying user")
                 dial_numbers(DIAL_NUMBERS)
                 count = 1
                 break
+            
