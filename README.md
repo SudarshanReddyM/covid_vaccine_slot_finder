@@ -1,6 +1,13 @@
 # covid_vaccine_slot_finder
 
 
+Everyone knows how tough it is to find a **COVID-19 Vaccine Slot** in these tough times.
+
+
+So this is simple python program which notifies you via a call when ever a slot is vacant in the district.
+
+This is developed using Twilio which helps in making a call.
+
 
 Step 1:
   Fork the folder
@@ -24,8 +31,14 @@ Step 2:
 Step 3:
   Give executable permission to the "init.sh" file
   Command to change permission
-  chmod +x init.sh
+  ```chmod +x init.sh```
  
 Step 4:
-  bash init.sh
+  ```bash init.sh```
   
+After you found the slot make sure to kill the process.
+This can be done by executing below commands.
+```
+ps -elf | grep find_slot.py
+```
+Copy the PID and kill using ```kill -9 <PID>```
