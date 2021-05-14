@@ -1,0 +1,8 @@
+<Response>
+<Say voice="alice">
+Vaccine Slots Available
+</Say>
+<Dial record="true">
+<Conference>Hurry UP</Conference>
+</Dial>
+</Response>
