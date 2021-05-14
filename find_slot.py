@@ -7,7 +7,7 @@ import logging
 
 log_formatter ='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
-logging.basicConfig(level=logging.DEBUG, filename="slot_finder.log", format=log_formatter)
+logging.basicConfig(level=logging.DEBUG, filename="vaccine_slot_finder.log", format=log_formatter)
 logging.debug('This will get logged')
 
 # My twilio number which makes calls
@@ -43,17 +43,20 @@ headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleW
 url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id={}&date={}".format(str(district_id), str(today_date)) 
 print("\n")
 while True:
+    time.sleep(3)
     vaccine_centres = requests.get(url=url, headers=headers)
-    for centre in json.loads(vaccine_centres.text).get("centers"):
+    vaccine_centres = json.loads(vaccine_centres.content.decode("utf-8"))
+    print(vaccine_centres)
+    for centre in vaccine_centres.get("centers"):
         if count == 1:
             count = 0
             time.sleep(60)
             break
         for session in centre.get("sessions"):
-            log.info("You will receive a call if a vacant slot is found")
+            logging.info("You will receive a call if a vacant slot is found")
             if session.get("min_age_limit") == 18 and session.get("available_capacity"):
-                log.info("Calling and Notifying user")
-                dial_numbers(DIAL_NUMBERS)
+                logging.info("Calling and Notifying user")
+                # dial_numbers(DIAL_NUMBERS)
                 count = 1
                 break
             
