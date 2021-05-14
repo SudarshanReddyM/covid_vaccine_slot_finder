@@ -43,7 +43,7 @@ headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleW
 url = "https://cdn-api.co-vin.in/api/v2/appointment/sessions/public/calendarByDistrict?district_id={}&date={}".format(str(district_id), str(today_date)) 
 print("\n")
 while True:
-    time.sleep(3)
+    logging.info("You will receive a call if a vacant slot is found")
     vaccine_centres = requests.get(url=url, headers=headers)
     vaccine_centres = json.loads(vaccine_centres.content.decode("utf-8"))
     print(vaccine_centres)
@@ -53,7 +53,7 @@ while True:
             time.sleep(60)
             break
         for session in centre.get("sessions"):
-            logging.info("You will receive a call if a vacant slot is found")
+            
             if session.get("min_age_limit") == 18 and session.get("available_capacity"):
                 logging.info("Calling and Notifying user")
                 # dial_numbers(DIAL_NUMBERS)
